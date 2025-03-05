@@ -10,10 +10,14 @@ from dinero.exceptions import InvalidOperationError
 @pytest.mark.parametrize(
     "amount, divisor, total",
     [
-        (Dinero("155.5", USD), 2.5, Dinero("62.20", USD)),
-        (Dinero("155.5", USD), Decimal(2.5), Dinero("62.20", USD)),
-        (Dinero("200", USD), 2, Dinero(100, USD)),
-        (Dinero("200", USD), Decimal(2), Dinero(100, USD)),
+        (Dinero.from_major("155.5", USD), 2.5, Dinero.from_major("62.20", USD)),
+        (
+            Dinero.from_major("155.5", USD),
+            Decimal(2.5),
+            Dinero.from_major("62.20", USD),
+        ),
+        (Dinero.from_major("200", USD), 2, Dinero.from_major(100, USD)),
+        (Dinero.from_major("200", USD), Decimal(2), Dinero.from_major(100, USD)),
     ],
 )
 def test_divide_amount(amount, divisor, total):
@@ -25,9 +29,9 @@ def test_divide_amount(amount, divisor, total):
 @pytest.mark.parametrize(
     "amount, addend",
     [
-        (Dinero(24.5, USD), []),
-        (Dinero(24.5, USD), ()),
-        (Dinero("24.5", USD), {}),
+        (Dinero.from_major(24.5, USD), []),
+        (Dinero.from_major(24.5, USD), ()),
+        (Dinero.from_major("24.5", USD), {}),
     ],
 )
 def test_invalid_operation_error(amount, addend):

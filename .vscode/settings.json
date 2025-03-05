@@ -53,13 +53,12 @@
         "titleBar.inactiveBackground": "#11182799",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "python.linting.flake8Enabled": true,
-    "python.linting.flake8Args": [
-        "--ignore=E501"
+    "flake8.enabled": true,
+    "flake8.args": [
+        "--ignore=E501",
     ],
     "editor.defaultFormatter": "ms-python.black-formatter",
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.formatting.provider": "black",
 }

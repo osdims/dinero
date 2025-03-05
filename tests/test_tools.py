@@ -15,12 +15,12 @@ from dinero.tools import (
 @pytest.mark.parametrize(
     "amount, vat_rate, expected_vat_amount",
     [
-        (Dinero(100, USD), 7.25, Dinero("6.76", USD)),
-        (Dinero(50, EUR), 21, Dinero("8.68", EUR)),
-        (Dinero(500, CLP), 19, Dinero("80", CLP)),
+        (Dinero.from_major(100, USD), 7.25, Dinero.from_major("6.76", USD)),
+        (Dinero.from_major(50, EUR), 21, Dinero.from_major("8.68", EUR)),
+        (Dinero.from_major(500, CLP), 19, Dinero.from_major("80", CLP)),
         (100, 7.25, InvalidOperationError),
-        (Dinero(100, USD), "7.25", TypeError),
-        (Dinero(100, USD), -7.25, ValueError),
+        (Dinero.from_major(100, USD), "7.25", TypeError),
+        (Dinero.from_major(100, USD), -7.25, ValueError),
     ],
 )
 def test_calculate_vat(amount, vat_rate, expected_vat_amount):
@@ -38,14 +38,14 @@ def test_calculate_vat(amount, vat_rate, expected_vat_amount):
 @pytest.mark.parametrize(
     "amount, percentage, expected_result",
     [
-        (Dinero("3000", USD), 15, Dinero("450", USD)),
-        (Dinero("3000", USD), 0, Dinero("0", USD)),
-        (Dinero("3000", USD), 100, Dinero("3000", USD)),
-        (Dinero("3000", EUR), 15, Dinero("450", EUR)),
-        (Dinero("3000", EUR), 0, Dinero("0", EUR)),
-        (Dinero("3000", EUR), 100, Dinero("3000", EUR)),
-        (Dinero("3000", USD), "15", TypeError),
-        (Dinero("3000", USD), -15, ValueError),
+        (Dinero.from_major("3000", USD), 15, Dinero.from_major("450", USD)),
+        (Dinero.from_major("3000", USD), 0, Dinero.from_major("0", USD)),
+        (Dinero.from_major("3000", USD), 100, Dinero.from_major("3000", USD)),
+        (Dinero.from_major("3000", EUR), 15, Dinero.from_major("450", EUR)),
+        (Dinero.from_major("3000", EUR), 0, Dinero.from_major("0", EUR)),
+        (Dinero.from_major("3000", EUR), 100, Dinero.from_major("3000", EUR)),
+        (Dinero.from_major("3000", USD), "15", TypeError),
+        (Dinero.from_major("3000", USD), -15, ValueError),
         (3000, 15, InvalidOperationError),
     ],
 )
@@ -61,13 +61,13 @@ def test_calculate_percentage(amount, percentage, expected_result):
 @pytest.mark.parametrize(
     "principal, interest_rate, duration, expected_interest, error",
     [
-        (Dinero(1000, USD), 5, 2, Dinero(100, USD), None),
-        (Dinero(500, EUR), 3.5, 3, Dinero(52.5, EUR), None),
+        (Dinero.from_major(1000, USD), 5, 2, Dinero.from_major(100, USD), None),
+        (Dinero.from_major(500, EUR), 3.5, 3, Dinero.from_major(52.5, EUR), None),
         (1000, 5, 2, None, InvalidOperationError),
-        (Dinero(1000, USD), 5, "2.5", None, TypeError),
-        (Dinero(1000, USD), 5, 2.5, None, TypeError),
-        (Dinero(1000, USD), -5, 2, None, ValueError),
-        (Dinero(1000, USD), 5, -2, None, ValueError),
+        (Dinero.from_major(1000, USD), 5, "2.5", None, TypeError),
+        (Dinero.from_major(1000, USD), 5, 2.5, None, TypeError),
+        (Dinero.from_major(1000, USD), -5, 2, None, ValueError),
+        (Dinero.from_major(1000, USD), 5, -2, None, ValueError),
     ],
 )
 def test_calculate_simple_interest(
@@ -92,13 +92,20 @@ def test_calculate_simple_interest(
 @pytest.mark.parametrize(
     "principal, interest_rate, duration, compound_frequency, expected, error",
     [
-        (Dinero(1000, USD), 5.0, 10, 12, Dinero(647.01, USD), None),
-        (Dinero(500, EUR), 2.5, 5, 4, Dinero(66.35, EUR), None),
-        (Dinero(2000, JPY), 1.0, 3, 1, Dinero(60.60, JPY), None),
+        (
+            Dinero.from_major(1000, USD),
+            5.0,
+            10,
+            12,
+            Dinero.from_major(647.01, USD),
+            None,
+        ),
+        (Dinero.from_major(500, EUR), 2.5, 5, 4, Dinero.from_major(66.35, EUR), None),
+        (Dinero.from_major(2000, JPY), 1.0, 3, 1, Dinero.from_major(60.60, JPY), None),
         (1000, 5.0, 10, 12, None, InvalidOperationError),
-        (Dinero(1000, USD), -5.0, 10, 12, None, ValueError),
-        (Dinero(1000, USD), 5.0, -10, 12, None, ValueError),
-        (Dinero(1000, USD), 5.0, 10, -12, None, ValueError),
+        (Dinero.from_major(1000, USD), -5.0, 10, 12, None, ValueError),
+        (Dinero.from_major(1000, USD), 5.0, -10, 12, None, ValueError),
+        (Dinero.from_major(1000, USD), 5.0, 10, -12, None, ValueError),
     ],
 )
 def test_calculate_compound_interest(
@@ -125,12 +132,12 @@ def test_calculate_compound_interest(
 @pytest.mark.parametrize(
     "cost, markup, expected_final_price, error",
     [
-        (Dinero(1000, USD), 15, Dinero(1150, USD), None),
-        (Dinero(500, EUR), 10, Dinero(550, EUR), None),
-        (Dinero(2000, CLP), 20, Dinero(2400, CLP), None),
+        (Dinero.from_major(1000, USD), 15, Dinero.from_major(1150, USD), None),
+        (Dinero.from_major(500, EUR), 10, Dinero.from_major(550, EUR), None),
+        (Dinero.from_major(2000, CLP), 20, Dinero.from_major(2400, CLP), None),
         (1000, 15, None, InvalidOperationError),
-        (Dinero(1000, USD), "15", None, TypeError),
-        (Dinero(1000, USD), -15, None, ValueError),
+        (Dinero.from_major(1000, USD), "15", None, TypeError),
+        (Dinero.from_major(1000, USD), -15, None, ValueError),
     ],
 )
 def test_calculate_markup(cost, markup, expected_final_price, error):

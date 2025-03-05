@@ -8,13 +8,19 @@ from dinero.currencies import EUR, USD
 
 def test_decimal_encoder():
     encoder = DecimalEncoder()
-    assert encoder.default(Dinero("12.3", USD)._normalize(quantize=True)) == "12.30"
-    assert encoder.default(Dinero(12.3, USD)._normalize(quantize=True)) == "12.30"
-    assert encoder.default(Dinero("12.3", USD)._normalize()) == "12.3"
-    assert encoder.default(Dinero(12.3, USD)._normalize()) == "12.3"
+    assert (
+        encoder.default(Dinero.from_major("12.3", USD)._normalize(quantize=True))
+        == "12.30"
+    )
+    assert (
+        encoder.default(Dinero.from_major(12.3, USD)._normalize(quantize=True))
+        == "12.30"
+    )
+    assert encoder.default(Dinero.from_major("12.3", USD)._normalize()) == "12.3"
+    assert encoder.default(Dinero.from_major(12.3, USD)._normalize()) == "12.3"
 
     to_json = {
-        "amount": Dinero("12.3", EUR)._normalize(quantize=True),
+        "amount": Dinero.from_major("12.3", EUR)._normalize(quantize=True),
         "currency": "EUR",
         "symbol": "$",
     }
@@ -23,7 +29,7 @@ def test_decimal_encoder():
     assert json.dumps(to_json, cls=DecimalEncoder) == expected_result
 
     to_json = {
-        "amount": Dinero("12.3", EUR)._normalize(),
+        "amount": Dinero.from_major("12.3", EUR)._normalize(),
         "currency": "EUR",
         "symbol": "$",
     }
@@ -35,9 +41,9 @@ def test_decimal_encoder():
 @pytest.mark.parametrize(
     "amount, formatted_amount",
     [
-        (Dinero("2444.5", USD), "2,444.50"),
-        (Dinero("2444.56", USD), "2,444.56"),
-        (Dinero("2444.566", USD), "2,444.57"),
+        (Dinero.from_major("2444.5", USD), "2,444.50"),
+        (Dinero.from_major("2444.56", USD), "2,444.56"),
+        (Dinero.from_major("2444.566", USD), "2,444.57"),
     ],
 )
 def test_amount_formatter(amount, formatted_amount):
